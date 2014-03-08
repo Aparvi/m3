@@ -1,0 +1,31 @@
+{
+  "name": "first-example",
+  "version": "0.0.0",
+  "description": "This is my example app",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "~3.4.x",
+    "logfmt":"0.21.0"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.3.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/singh-bk/node-js-sample"
+  },
+  "keywords": [
+    "\"example\"",
+    "heroku"
+  ],
+  "author": "BK",
+  "license": "open",
+  "dependencies": {
+    "logfmt": "~0.21.0",
+    "express": "~3.5.0"
+  }
+}
