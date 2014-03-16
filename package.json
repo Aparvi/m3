@@ -7,8 +7,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "express": "~3.4.x",
-    "logfmt":"0.21.0"
+    "logfmt": "~0.21.0",
+    "express": "~3.5.0",
+    "pg": "~2.x",
   },
   "engines": {
     "node": "0.10.x",
@@ -23,9 +24,5 @@
     "heroku"
   ],
   "author": "BK",
-  "license": "open",
-  "dependencies": {
-    "logfmt": "~0.21.0",
-    "express": "~3.5.0"
-  }
+  "license": "open"
 }
