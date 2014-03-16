@@ -9,7 +9,7 @@
   "dependencies": {
     "logfmt": "~0.21.0",
     "express": "~3.5.0",
-    "pg": "~2.x",
+    "pg": "~2.x"
   },
   "repository": {
     "type": "git",
