@@ -4,13 +4,19 @@ var app = express();
 
 var pg = require("pg");
 
+
 pg.connect(process.env.DATABASE_URL, function(err, client, done) {
   if(client != null){
   console.log("client is not null");
-  client.query('SELECT * FROM your_table', function(err, result) {
+  client.query('SELECT * FROM dish', function(err, result) {
     done();
-    if(err) return console.error(err);
+    if(err) {
+      console.log("error in running sql query");
+      return console.error(err);
+    }else{
+    console.log("rows returned"+result.rows);
     console.log(result.rows);
+   }
   });
 }else
 {
