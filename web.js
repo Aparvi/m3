@@ -1,9 +1,8 @@
 var express = require("express");
 var logfmt = require("logfmt");
 var app = express();
-
 var pg = require("pg");
-
+var date;
 
 pg.connect(process.env.DATABASE_URL, function(err, client, done) {
   if(client != null){
@@ -28,6 +27,10 @@ app.use(logfmt.requestLogger());
 
 app.get('/', function(req, res) {
   res.send('Welcome Back');
+  date = new Date().getTime();
+  console.log("The Current Timestamp is:"+date);
+  var date2 = new Date(date).toUTCString();
+  console.log("Readable date format:"+date2);
 });
 
 var port = Number(process.env.PORT || 5000);
