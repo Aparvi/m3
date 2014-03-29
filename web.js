@@ -2,35 +2,35 @@ var express = require("express");
 var logfmt = require("logfmt");
 var app = express();
 var pg = require("pg");
-var date;
-
-pg.connect(process.env.DATABASE_URL, function(err, client, done) {
-  if(client != null){
-  console.log("client is not null");
-  client.query('SELECT * FROM dish', function(err, result) {
-    done();
-    if(err) {
-      console.log("error in running sql query");
-      return console.error(err);
-    }else{
-    console.log("rows returned"+result.rows);
-    console.log(result.rows);
-   }
-  });
-}else
-{
-	console.log("client is null");
-}
-});
+var constants = require("./constants");
+var pgclient;
 
 app.use(logfmt.requestLogger());
 
+//any call will first establish the connection and then move to next
+app.get('*', function(req,res,next){
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+     if(client != null){
+        pgclient = client;
+        console.log("Client connection with Postgres DB is established");
+     }
+     else{
+        console.log("Client is null");
+     }
+  });
+  next();
+});
+
+// call to load the home page
 app.get('/', function(req, res) {
-  res.send('Welcome Back');
-  date = new Date().getTime();
-  console.log("The Current Timestamp is:"+date);
-  var date2 = new Date(date).toUTCString();
-  console.log("Readable date format:"+date2);
+  res.send('Load the home page here');
+});
+
+// rest call 
+app.get('/:loc/:srchqry', function(req,res){
+  console.log("Location:"+req.params.loc+" search query:"+req.params.srchqry);
+  console.log(constants.SELECT_DISH_TABLE_QUERY);
+  res.send("Location:"+req.params.loc+" search query:"+req.params.srchqry);
 });
 
 var port = Number(process.env.PORT || 5000);
