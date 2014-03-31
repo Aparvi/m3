@@ -30,7 +30,9 @@ app.get('/', function(req, res) {
 app.get('/:loc/:srchqry', function(req,res){
   console.log("Location:"+req.params.loc+" search query:"+req.params.srchqry);
   console.log(constants.SELECT_DISH_TABLE_QUERY);
-  pgclient.query(constants.SELCT_DISH_TABLE_QUERY,[req.params.srchqry],function(error, result){
+  var qry = (constants.SELECT_DISH_TABLE_QUERY).replace('$1',req.params.srchqry);
+  console.log("Final Query:"+qry);
+  pgclient.query(qry,function(error, result){
 	console.log("The result set:"+result.rows.length);
   });
   res.send("Location:"+req.params.loc+" search query:"+req.params.srchqry);
