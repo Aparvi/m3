@@ -38,6 +38,24 @@ app.get('/:loc/:srchqry', function(req,res){
   res.send("Location:"+req.params.loc+" search query:"+req.params.srchqry);
 });
 
+app.get('/dish/:dish_name', function(req,res)){
+  console.log("Location:"+req.params.loc+" search query:"+req.params.srchqry);
+  console.log(constants.SELECT_DISH_TABLE_QUERY);
+  var qry = (constants.SELECT_DISH_TABLE_QUERY).replace('$1',req.params.srchqry);
+  console.log("Final Query:"+qry);
+  var dish_id;
+  pgclient.query(qry,function(error, result){
+        console.log("The result set:"+result.rows.length);
+	if(result != null && result.rows !=null && result.rows.lenth > 0){
+	    dish_id = result.rows[0].data.toString();
+	}
+	else{
+	    dish_id = "No Data found for the given dish_name";
+	}
+  });
+  res.send(dish_id);
+}
+
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
   console.log("Listening on " + port);
