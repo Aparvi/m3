@@ -38,8 +38,7 @@ app.get('/:loc/:srchqry', function(req,res){
   res.send("Location:"+req.params.loc+" search query:"+req.params.srchqry);
 });
 
-app.get('/dish/:dish_name', function(req,res)){
-  console.log("Location:"+req.params.loc+" search query:"+req.params.srchqry);
+app.get('/dish/:dish_name', function(req,res){
   console.log(constants.SELECT_DISH_TABLE_QUERY);
   var qry = (constants.SELECT_DISH_TABLE_QUERY).replace('$1',req.params.srchqry);
   console.log("Final Query:"+qry);
@@ -54,7 +53,7 @@ app.get('/dish/:dish_name', function(req,res)){
 	}
   });
   res.send(dish_id);
-}
+});
 
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
