@@ -5,4 +5,4 @@ function define(key, value){
    });
 }
 
-define("SELECT_DISH_TABLE_QUERY","SELECT * FROM DISH WHERE DISH_NAME = ?");
+define("SELECT_DISH_TABLE_QUERY","SELECT DISH_ID FROM DISH WHERE DISH_NAME = $1");
