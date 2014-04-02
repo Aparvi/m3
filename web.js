@@ -7,18 +7,21 @@ var pgclient;
 
 app.use(logfmt.requestLogger());
 
-//any call will first establish the connection and then move to next
+//any call will first establish the connection and then move to next.
+//TODO - move next() under the connect function
 app.get('*', function(req,res,next){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
      if(client != null){
         pgclient = client;
         console.log("Client connection with Postgres DB is established");
+	next();
      }
      else{
         console.log("Client is null");
+	//TODO - Load the connection error page
      }
   });
-  next();
+  //next();
 });
 
 // call to load the home page
@@ -28,6 +31,7 @@ app.get('/', function(req, res) {
 
 // rest call 
 app.get('/:loc/:srchqry', function(req,res,next){
+  //If first param is "dish" call next() - this will call the other get method 
   if(req.params.loc == "dish"){
     console.log("request.params.loc is equal to dish");
     next();
@@ -46,6 +50,7 @@ app.get('/:loc/:srchqry', function(req,res,next){
   }
 });
 
+//API - for the table dish
 app.get('/dish/:dish_name', function(req,res){
   console.log(constants.SELECT_DISH_TABLE_QUERY);
   var qry = (constants.SELECT_DISH_TABLE_QUERY).replace('$1',req.params.dish_name);
@@ -60,11 +65,34 @@ app.get('/dish/:dish_name', function(req,res){
 	    dish_id = "No Data found for the given dish_name";
 	}
 	console.log("dish_id:"+dish_id);
+        //send the dish_id as the response
         res.send(dish_id);
   });
   //res.send(dish_id);
 });
 
+//API - for the table hotel
+app.get('/hotel/:hotel_name', function(req,res){
+  console.log(constants.SELECT_HOTEL_TABLE_QUERY);
+  var qry = (constants.SELECT_HOTEL_TABLE_QUERY).replace('$1',req.params.hotel_name);
+  console.log("Final Query:"+qry);
+  var hotel_id;
+  pgclient.query(qry,function(error, result){
+        console.log("The result set:"+result.rows.length);
+        if(result != null && result.rows !=null && result.rows.length > 0){
+            hotel_id = result.rows[0].hotel_id.toString();
+        }
+        else{
+            hotel_id = "No Data found for the given dish_name";
+        }
+        console.log("hotel_id:"+hotel_id);
+        //send the hotel_id as the response
+        res.send(hotel_id);
+  });
+});
+
+
+//declare the port and listen to it
 var port = Number(process.env.PORT || 5000);
 app.listen(port, function() {
   console.log("Listening on " + port);
