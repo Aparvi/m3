@@ -97,6 +97,7 @@ app.post('/dish/:dish_name', function(req,res){
   console.log(constants.INSERT_DISH_TABLE_QUERY);
   current_date = new Date().getTime();
   console.log("current_date:"+current_date);
+  console.log("current_date:"new Date(current_date));
   var qry = (constants.INSERT_DISH_TABLE_QUERY).replace('$1',current_date).replace('$2',req.params.dish_name).replace('$3',req.params.dish_type).replace('$4',dish_category);
   console.log("Final Query:"+qry);
   var insert_succeeded = false;
