@@ -54,7 +54,7 @@ app.get('/dish/:dish_name', function(req,res){
   pgclient.query(qry,function(error, result){
         console.log("The result set:"+result.rows.length);
 	if(result != null && result.rows !=null && result.rows.length > 0){
-	    dish_id = result.rows[0].data.toString();
+	    dish_id = result.rows[0].dish_id.toString();
 	}
 	else{
 	    dish_id = "No Data found for the given dish_name";
