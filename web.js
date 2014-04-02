@@ -59,8 +59,10 @@ app.get('/dish/:dish_name', function(req,res){
 	else{
 	    dish_id = "No Data found for the given dish_name";
 	}
+	console.log("dish_id"+dish_id);
+        res.send(dish_id);
   });
-  res.send(dish_id);
+  //res.send(dish_id);
 });
 
 var port = Number(process.env.PORT || 5000);
