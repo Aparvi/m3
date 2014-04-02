@@ -27,7 +27,14 @@ app.get('/', function(req, res) {
 });
 
 // rest call 
-app.get('/:loc/:srchqry', function(req,res){
+app.get('/:loc/:srchqry', function(req,res,next){
+  if(req.params.loc == "dish"){
+    console.log("request.params.loc is equal to dish");
+    next();
+  }
+  else{
+    console.log("req.params.loc is not equal to dish");
+  }
   console.log("Location:"+req.params.loc+" search query:"+req.params.srchqry);
   console.log(constants.SELECT_DISH_TABLE_QUERY);
   var qry = (constants.SELECT_DISH_TABLE_QUERY).replace('$1',req.params.srchqry);
