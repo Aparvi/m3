@@ -53,13 +53,13 @@ app.get('/dish/:dish_name', function(req,res){
   var dish_id;
   pgclient.query(qry,function(error, result){
         console.log("The result set:"+result.rows.length);
-	if(result != null && result.rows !=null && result.rows.lenth > 0){
+	if(result != null && result.rows !=null && result.rows.length > 0){
 	    dish_id = result.rows[0].data.toString();
 	}
 	else{
 	    dish_id = "No Data found for the given dish_name";
 	}
-	console.log("dish_id"+dish_id);
+	console.log("dish_id:"+dish_id);
         res.send(dish_id);
   });
   //res.send(dish_id);
