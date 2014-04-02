@@ -4,11 +4,11 @@ var app = express();
 var pg = require("pg");
 var constants = require("./constants");
 var pgclient;
+var current_date;
 
 app.use(logfmt.requestLogger());
 
 //any call will first establish the connection and then move to next.
-//TODO - move next() under the connect function
 app.get('*', function(req,res,next){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
      if(client != null){
@@ -21,8 +21,25 @@ app.get('*', function(req,res,next){
 	//TODO - Load the connection error page
      }
   });
-  //next();
 });
+
+
+// Any call with post will first try to connect to pg and initialize the pgclient
+// In case of any error in connecting, load the connection error page.
+app.post('*', function(req,res,next){
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+     if(client != null){
+        pgclient = client;
+        console.log("Client connection with Postgres DB is established");
+        next();
+     }
+     else{
+        console.log("Client is null");
+        //TODO - Load the connection error page
+     }
+  });
+});
+
 
 // call to load the home page
 app.get('/', function(req, res) {
@@ -51,6 +68,9 @@ app.get('/:loc/:srchqry', function(req,res,next){
 });
 
 //API - for the table dish
+//GET API for the dish table
+//    url - http://locahost:port/dish/<dish_name>
+//TODO - add null check for pgclient
 app.get('/dish/:dish_name', function(req,res){
   console.log(constants.SELECT_DISH_TABLE_QUERY);
   var qry = (constants.SELECT_DISH_TABLE_QUERY).replace('$1',req.params.dish_name);
@@ -71,13 +91,35 @@ app.get('/dish/:dish_name', function(req,res){
   //res.send(dish_id);
 });
 
+//POST API for the dish table
+//	url - http://localhost:port/dish/<dish_name>
+app.post('/dish/:dish_name', function(req,res){
+  console.log(constants.INSERT_DISH_TABLE_QUERY);
+  current_date = new Date().UTC();
+  console.log("current_date:"+current_date);
+  var qry = (constants.INSERT_DISH_TABLE_QUERY).replace('$1',current_date).replace('$2',req.params.dish_name).replace('$3',req.params.dish_type).replace('$4',dish_category);
+  console.log("Final Query:"+qry);
+  var insert_succeeded = false;
+  if(pgclient != null){
+    pgclient.query(qry,function(error, result){
+        console.log("The result:"+result);
+    });
+    res.send(insert_succeeded);
+  }
+  else{
+     //TODO - load the no connection error page here
+     res.send(insert_succeeded);
+  }
+});
+
 //API - for the table hotel
 app.get('/hotel/:hotel_name', function(req,res){
   console.log(constants.SELECT_HOTEL_TABLE_QUERY);
   var qry = (constants.SELECT_HOTEL_TABLE_QUERY).replace('$1',req.params.hotel_name);
   console.log("Final Query:"+qry);
   var hotel_id;
-  pgclient.query(qry,function(error, result){
+  if(pgclient != null){
+    pgclient.query(qry,function(error, result){
         console.log("The result set:"+result.rows.length);
         if(result != null && result.rows !=null && result.rows.length > 0){
             hotel_id = result.rows[0].hotel_id.toString();
@@ -88,7 +130,11 @@ app.get('/hotel/:hotel_name', function(req,res){
         console.log("hotel_id:"+hotel_id);
         //send the hotel_id as the response
         res.send(hotel_id);
-  });
+    });
+  }
+  else{
+     //TODO - load the connnection error page.
+  }
 });
 
 
