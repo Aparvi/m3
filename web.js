@@ -103,9 +103,17 @@ app.post('/dish/:dish_name/:dish_type/:dish_category', function(req,res){
   var insert_succeeded = false;
   if(pgclient != null){
     pgclient.query(qry,function(error, result){
+        if(error){
+	   console.log("Error in inserting into the DB");
+	}
+	else{
+	   console.log("Successful insertion in the DB - Proceed call to worker for insetion of images");
+	   insert_succeeded = true;
+	}
+	res.send(insert_succeeded);
         console.log("The result:"+result);
     });
-    res.send(insert_succeeded);
+    //res.send(insert_succeeded);
   }
   else{
      //TODO - load the no connection error page here
