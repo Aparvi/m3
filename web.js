@@ -93,6 +93,7 @@ app.get('/dish/:dish_name', function(req,res){
 
 //POST API for the dish table
 //	url - http://localhost:port/dish/<dish_name>
+//TODO - call worker service to insert images.
 app.post('/dish/:dish_name/:dish_type/:dish_category', function(req,res){
   console.log(constants.INSERT_DISH_TABLE_QUERY);
   current_date = new Date().getTime();
