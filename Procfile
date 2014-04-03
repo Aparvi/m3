@@ -1,2 +1,2 @@
 web: node web.js
-//web: node sql_init.js
+worker: node worker.js
