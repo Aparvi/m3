@@ -52,7 +52,7 @@ app.get('/', function(req, res) {
 // rest call 
 app.get('/:loc/:srchqry', function(req,res,next){
   //If first param is "dish" call next() - this will call the other get method 
-  if(req.params.loc == "dish" || req.params.loc == "hotel"){
+  if(req.params.loc == "dish" || req.params.loc == "hotel" ||req.params.loc == "review"){
     console.log("request.params.loc is equal to dish");
     next();
   }

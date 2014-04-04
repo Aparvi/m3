@@ -9,3 +9,8 @@ webjs.app.post('/dish_image/:dish_id', function(req,res){
 	console.log("Inside the get method of worker process");
 });
 
+webjs.app.get('/review/:review_id', function(req, res){
+	console.log("INSIDE GET METHOD OF WORKER.JS");
+
+});
+
