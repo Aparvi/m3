@@ -6,6 +6,9 @@ var constants = require("./constants");
 var pgclient;
 var current_date;
 
+//define all the exports over here - to be used by the other js file
+module.exports.app = app;
+
 app.use(logfmt.requestLogger());
 
 //any call will first establish the connection and then move to next.
