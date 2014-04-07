@@ -6,8 +6,10 @@ var constants = require("./constants");
 var pgclient;
 var current_date;
 
+//var worker = require("./worker");
+
 //define all the exports over here - to be used by the other js file
-module.exports.app = app;
+//module.exports.app = app;
 
 app.use(logfmt.requestLogger());
 
@@ -150,6 +152,9 @@ app.get('/hotel/:hotel_name', function(req,res){
   }
 });
 
+
+//add require for the worker.js file
+require("./worker")(app);
 
 //declare the port and listen to it
 var port = Number(process.env.PORT || 5000);

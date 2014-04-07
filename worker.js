@@ -1,16 +1,10 @@
-//var express = require("express");
-//var app = express();
 
-// import the other js file
-var webjs = require('./web');
-
-
-webjs.app.post('/dish_image/:dish_id', function(req,res){
-	console.log("Inside the get method of worker process");
-});
-
-webjs.app.get('/review/:review_id', function(req, res){
+module.exports = function(app){
+     app.get('/review/:review_id', function(req, res){
 	console.log("INSIDE GET METHOD OF WORKER.JS");
-
-});
+     });
+     app.post('/dish_image/:dish_id', function(req,res){
+        console.log("INSIDE POST METHOD OF WORKER.JS");
+     });
+}
 
