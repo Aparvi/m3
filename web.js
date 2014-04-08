@@ -160,7 +160,7 @@ app.get('/review/:hotel_dish_id', function(req,res){
    var review_id;
    if(pgclient != null){
       pgclient.query(qry, function(error, result){
-           if(result != null && result.rows != null){
+           if(result != null && result.rows != null && result.rows.length > 0){
                if(result.rows[0].review_id != null){
                    review_id = result.rows[0].review_id.toString();
                }
