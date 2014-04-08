@@ -6,14 +6,10 @@ var constants = require("./constants");
 var pgclient;
 var current_date;
 
-//var worker = require("./worker");
-
-//define all the exports over here - to be used by the other js file
-//module.exports.app = app;
 
 app.use(logfmt.requestLogger());
 
-//any call will first establish the connection and then move to next.
+//any get call will first establish the connection and then move to next.
 app.get('*', function(req,res,next){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
      if(client != null){
@@ -51,6 +47,7 @@ app.get('/', function(req, res) {
   res.send('Load the home page here');
 });
 
+//TODO - review the below get code - MAY NOT BE NEEDED.
 // rest call 
 app.get('/:loc/:srchqry', function(req,res,next){
   //If first param is "dish" call next() - this will call the other get method 
@@ -72,10 +69,11 @@ app.get('/:loc/:srchqry', function(req,res,next){
   }
 });
 
-//API - for the table dish
+//API - for the table "DISH"
 //GET API for the dish table
 //    url - http://locahost:port/dish/<dish_name>
 //TODO - add null check for pgclient
+//TODO - IN CASE OF ALL QUERY FUNCTION CALL FOR pgclient, HANDLE THE ERROR SCENARIO
 app.get('/dish/:dish_name', function(req,res){
   console.log(constants.SELECT_DISH_TABLE_QUERY);
   var qry = (constants.SELECT_DISH_TABLE_QUERY).replace('$1',req.params.dish_name);
@@ -93,17 +91,16 @@ app.get('/dish/:dish_name', function(req,res){
         //send the dish_id as the response
         res.send(dish_id);
   });
-  //res.send(dish_id);
 });
 
 //POST API for the dish table
 //	url - http://localhost:port/dish/<dish_name>
 //TODO - call worker service to insert images.
+//TODO - extract image from the body the request. there can be multiple images. images will be sent in Base64 encoded format.
 app.post('/dish/:dish_name/:dish_type/:dish_category', function(req,res){
   console.log(constants.INSERT_DISH_TABLE_QUERY);
   current_date = new Date().getTime();
   console.log("current_date:"+current_date);
-  //console.log("current_date:"+new Date(current_date));
   var qry = (constants.INSERT_DISH_TABLE_QUERY).replace('$1',current_date).replace('$2',req.params.dish_name).replace('$3',req.params.dish_type).replace('$4',req.params.dish_category);
   console.log("Final Query:"+qry);
   var insert_succeeded = false;
@@ -113,13 +110,13 @@ app.post('/dish/:dish_name/:dish_type/:dish_category', function(req,res){
 	   console.log("Error in inserting into the DB");
 	}
 	else{
+           //TODO - Add call to worker to insert the images one by one.
 	   console.log("Successful insertion in the DB - Proceed call to worker for insetion of images");
 	   insert_succeeded = true;
 	}
 	res.send(insert_succeeded);
         console.log("The result:"+result);
     });
-    //res.send(insert_succeeded);
   }
   else{
      //TODO - load the no connection error page here
@@ -128,6 +125,7 @@ app.post('/dish/:dish_name/:dish_type/:dish_category', function(req,res){
 });
 
 //API - for the table hotel
+//    url - http://localhost:port/hotel/<hotel_name>
 app.get('/hotel/:hotel_name', function(req,res){
   console.log(constants.SELECT_HOTEL_TABLE_QUERY);
   var qry = (constants.SELECT_HOTEL_TABLE_QUERY).replace('$1',req.params.hotel_name);
@@ -149,11 +147,38 @@ app.get('/hotel/:hotel_name', function(req,res){
   }
   else{
      //TODO - load the connnection error page.
+     res.send("Load the connection error page");
   }
 });
 
+//API for the table review
+//   url for get - http://localhost:port/review/:hotel_dish_id
+//      Algorithm - Based on the hotel_dish_id
+app.get('/review/:hotel_dish_id', function(req,res){
+   var qry = (constants.SELECT_REVIEW_TABLE_QUERY).replace('$1', req.params.hotel_dish_id);
+   console.log("Final Query:"+qry);
+   var review_id;
+   if(pgclient != null){
+      pgclient.query(qry, function(error, result){
+           if(result != null){
+               review_id = result.rows[0].review_id.toString();
+           }
+           else{
+               review_id = "No Review Id found for the hotel_dish_id";
+           }
+           console.log("review_id:"+review_id);
+           res.send(review_id);
+      });
+   }
+   else{
+      //TODO - load the error connection page.
+      console.log("Load the error connection page");
+   }
 
-//add require for the worker.js file
+});
+
+
+//add require for the worker.js file - 
 require("./worker")(app);
 
 //declare the port and listen to it
