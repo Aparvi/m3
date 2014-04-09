@@ -182,6 +182,18 @@ app.get('/review/:hotel_dish_id', function(req,res){
 
 });
 
+// API to post review
+// url for post - http://localhost:port/review/<hotel_dish_id>
+// request body to contain the user_id, each of the 6 review params and text review
+//TODO - complete the code below
+app.post('review/:hotel_dish_id' function(req, res){
+   current_date = new Date().getTime();
+   var qry = (constants.INSERT_REVIEW_TABLE_QUERY).replace('$1',current_date).replace('$2',req.params.hotel_dish_id).replace('$3',req.body.user_id)
+            .replace('$4',req.body.rating1).replace('$5',req.body.rating2).replace('$6',req.body.rating3).replace('$7',req.body.rating4).replace('$8',req.body.rating5)
+            .replace('$9',req.body.rating6).replace('$10',req.body.final_rating);    
+   console.log("FINAL QUERY:"+qry);
+});
+
 
 //add require for the worker.js file - 
 require("./worker")(app);
