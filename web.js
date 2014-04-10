@@ -166,7 +166,7 @@ app.post('/hotel', function(req,res){
   current_date = new Date().getTime();
   console.log("current_date:"+current_date);
   var qry = (constants.INSERT_HOTEL_TABLE_QUERY).replace('$1',current_date).replace('$2',req.body.hotel_name).replace('$3',req.body.hotel_street_address)
-            .replace('$4',req.body.hotel_location).replace('$5’,req.body.hotel_state).replace('$6’,req.body.hotel_country);
+            .replace('$4',req.body.hotel_location).replace('$5',req.body.hotel_state).replace('$6',req.body.hotel_country);
   console.log("Final Query:"+qry);
   var insert_succeeded = false;
   if(pgclient != null){
