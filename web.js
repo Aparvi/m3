@@ -156,6 +156,40 @@ app.get('/hotel/:hotel_name', function(req,res){
   }
 });
 
+
+/*
+** API - post request for the table “HOTEL”
+** url - http://localhost:port/hotel
+*/
+app.post(‘/hotel', function(req,res){
+  console.log(constants.INSERT_HOTEL_TABLE_QUERY);
+  current_date = new Date().getTime();
+  console.log("current_date:"+current_date);
+  var qry = (constants.INSERT_HOTEL_TABLE_QUERY).replace('$1',current_date).replace('$2',req.body.hotel_name).replace('$3',req.body.hotel_street_address)
+            .replace('$4',req.body.hotel_location).replace('$5’,req.body.hotel_state).replace('$6’,req.body.hotel_country);
+  console.log("Final Query:"+qry);
+  var insert_succeeded = false;
+  if(pgclient != null){
+    pgclient.query(qry,function(error, result){
+        if(error){
+	   console.log("Error in inserting hotel data into the DB");
+	}
+	else{
+           //TODO - Add call to worker to insert the images one by one.
+	   console.log("Successful insertion in the DB - Proceed call to worker for insertion of images");
+	   insert_succeeded = true;
+	}
+	res.send(insert_succeeded);
+        console.log("The result:"+result);
+    });
+  }
+  else{
+     //TODO - load the no connection error page here
+     res.send(insert_succeeded);
+  }
+});
+
+
 //API for the table review
 //   url for get - http://localhost:port/review/:hotel_dish_id
 //      Algorithm - Based on the hotel_dish_id
