@@ -10,6 +10,9 @@ var current_date;
 app.use(logfmt.requestLogger());
 app.use(express.bodyParser());
 app.use(app.router);
+app.use(express.json());
+app.use(express.urlencoded());
+
 
 //any get call will first establish the connection and then move to next.
 app.get('*', function(req,res,next){
