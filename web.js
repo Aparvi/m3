@@ -202,16 +202,19 @@ app.post('/review/:hotel_dish_id', function(req, res){
        pgclient.query(qry, function(error, result){
       	  // In case of an error log the details
          if(error != null){
-            console.log("Error in inserting data in the postgred DB");
+            console.log("Error in inserting review in the postgred DB");
+            res.send("Error");
          }
          else{
            //TODO - call the other server to insert review text in the mongo DB.
+           res.send("Request delegated");
          }
       });
    }
    else{
       //TODO - load the error connection page.
       console.log("Load the error connection page");
+      res.send("Load the Error Page");
    }
 });
 
