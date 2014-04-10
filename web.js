@@ -157,11 +157,11 @@ app.get('/hotel/:hotel_name', function(req,res){
 });
 
 
-/*
-** API - post request for the table “HOTEL”
-** url - http://localhost:port/hotel
-*/
-app.post(‘/hotel', function(req,res){
+
+// API - post request for the table “HOTEL”
+// url - http://localhost:port/hotel
+
+app.post('/hotel', function(req,res){
   console.log(constants.INSERT_HOTEL_TABLE_QUERY);
   current_date = new Date().getTime();
   console.log("current_date:"+current_date);
