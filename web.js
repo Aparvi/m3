@@ -197,6 +197,22 @@ app.post('/review/:hotel_dish_id', function(req, res){
             .replace('$4',req.body.rating1).replace('$5',req.body.rating2).replace('$6',req.body.rating3).replace('$7',req.body.rating4).replace('$8',req.body.rating5)
             .replace('$9',req.body.rating6).replace('$10',req.body.final_rating);    
    console.log("FINAL QUERY:"+qry);
+   // This query can be delegated to a worker node 
+   if(pgclient != null){
+       pgclient.query(qry, function(error, result){
+      	  // In case of an error log the details
+         if(error != null){
+            console.log("Error in inserting data in the postgred DB");
+         }
+         else{
+           //TODO - call the other server to insert review text in the mongo DB.
+         }
+      });
+   }
+   else{
+      //TODO - load the error connection page.
+      console.log("Load the error connection page");
+   }
 });
 
 
