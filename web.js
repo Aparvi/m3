@@ -133,6 +133,7 @@ app.post('/dish/:dish_name/:dish_type/:dish_category', function(req,res){
 //    url - http://localhost:port/hotel/<hotel_name>
 app.get('/hotel/:hotel_name', function(req,res){
   console.log(constants.SELECT_HOTEL_TABLE_QUERY);
+  console.log("new Date:"+new Date("1395938256879"));
   var qry = (constants.SELECT_HOTEL_TABLE_QUERY).replace('$1',req.params.hotel_name);
   console.log("Final Query:"+qry);
   var hotel_id;
@@ -141,7 +142,6 @@ app.get('/hotel/:hotel_name', function(req,res){
         console.log("The result set:"+result.rows.length);
         if(result != null && result.rows !=null && result.rows.length > 0){
             hotel_id = result.rows[0].hotel_id.toString();
-	    hotel_id = new Date(hotel_id);
         }
         else{
             hotel_id = "No Data found for the given dish_name";
