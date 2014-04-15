@@ -136,7 +136,7 @@ app.put('/dish/:dish_name', function(req,res){
   console.log(constants.UPDATE_DISH_TABLE_QUERY);
   current_date = new Date().getTime();
   console.log("current_date:"+current_date);
-  var qry = (constants.UPDATE_DISH_TABLE_QUERY).replace('$1',req.params.dish_name).replace('$2',req.body.new_dish_name);
+  var qry = (constants.UPDATE_DISH_TABLE_QUERY).replace('$2',req.params.dish_name).replace('$1',req.body.new_dish_name);
   console.log("Final Query:"+qry);
   var update_succeeded = false;
   if(pgclient != null){
