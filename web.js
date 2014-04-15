@@ -46,6 +46,21 @@ app.post('*', function(req,res,next){
   });
 });
 
+//any get call will first establish the connection and then move to next.
+app.put('*', function(req,res,next){
+  pg.connect(process.env.DATABASE_URL, function(err, client, done) {
+     if(client != null){
+        pgclient = client;
+        console.log("Client connection with Postgres DB is established");
+        next();
+     }
+     else{
+        console.log("Client is null");
+        //TODO - Load the connection error page
+     }
+  });
+});
+
 
 // call to load the home page
 app.get('/', function(req, res) {
