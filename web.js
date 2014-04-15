@@ -141,6 +141,7 @@ app.get('/hotel/:hotel_name', function(req,res){
         console.log("The result set:"+result.rows.length);
         if(result != null && result.rows !=null && result.rows.length > 0){
             hotel_id = result.rows[0].hotel_id.toString();
+	    hotel_id = new Date(hotel_id);
         }
         else{
             hotel_id = "No Data found for the given dish_name";
@@ -237,7 +238,7 @@ app.post('/review/:hotel_dish_id', function(req, res){
       	  // In case of an error log the details
          if(error != null){
             console.log("Error in inserting review in the postgred DB");
-            res.send("Error");
+            res.send("Error in inserting review in the postgres DB");
          }
          else{
            //TODO - call the other server to insert review text in the mongo DB.
