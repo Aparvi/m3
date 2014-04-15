@@ -129,11 +129,40 @@ app.post('/dish/:dish_name/:dish_type/:dish_category', function(req,res){
   }
 });
 
+//PUT API for the dish table
+//      url - http://localhost:port/dish/<dish_name>
+// request body to contain the new dish name <new_dish_name>
+app.put('/dish/:dish_name', function(req,res){
+  console.log(constants.UPDATE_DISH_TABLE_QUERY);
+  current_date = new Date().getTime();
+  console.log("current_date:"+current_date);
+  var qry = (constants.UPDATE_DISH_TABLE_QUERY).replace('$1',req.params.dish_name).replace('$2',req.body.new_dish_name);
+  console.log("Final Query:"+qry);
+  var update_succeeded = false;
+  if(pgclient != null){
+    pgclient.query(qry,function(error, result){
+        if(error){
+           console.log("Error in updating into the DB");
+        }
+        else{
+           console.log("Successful update in the DB");
+           update_succeeded = true;
+        }
+        res.send(update_succeeded);
+        console.log("The result:"+result);
+    });
+  }
+  else{
+     //TODO - load the no connection error page here
+     res.send(update_succeeded);
+  }
+});
+
+
 //API - for the table hotel
 //    url - http://localhost:port/hotel/<hotel_name>
 app.get('/hotel/:hotel_name', function(req,res){
   console.log(constants.SELECT_HOTEL_TABLE_QUERY);
-  console.log("new Date:"+new Date(1395938256879));
   var qry = (constants.SELECT_HOTEL_TABLE_QUERY).replace('$1',req.params.hotel_name);
   console.log("Final Query:"+qry);
   var hotel_id;
