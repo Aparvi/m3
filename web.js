@@ -189,6 +189,33 @@ app.put('/dish/:dish_name', function(req,res){
   }
 });
 
+//DELETE API for the dish table - This is called only by moderater action. Cannot be called by end user
+//      url - http://localhost:port/dish/<dish_name>
+app.delete('/dish/:dish_name', function(req,res){
+  console.log(constants.DELETE_DISH_TABLE_QUERY);
+  var qry = (constants.DELETE_DISH_TABLE_QUERY).replace('$1',req.params.dish_name);
+  console.log("Final Query:"+qry);
+  var delete_succeeded = false;
+  if(pgclient != null){
+    pgclient.query(qry,function(error, result){
+        if(error){
+           console.log("Error in deleting dish name from the dish table");
+        }
+        else{
+           console.log("Successful delete of dish name from dish table");
+           delete_succeeded = true;
+        }
+        res.send(delete_succeeded);
+        console.log("The result:"+result);
+    });
+  }
+  else{
+     //TODO - load the no connection error page here
+     res.send(delete_succeeded);
+  }
+});
+
+
 
 //API - for the table hotel
 //    url - http://localhost:port/hotel/<hotel_name>
