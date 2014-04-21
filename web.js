@@ -24,7 +24,9 @@ app.get('*', function(req,res,next){
      }
      else{
         console.log("Client is null");
-	//TODO - Load the connection error page
+	//TODO - Load the connection error page -- uncomment the below line and comment call to next in prod.
+	//res.send(500,"Load the error connection page");
+	next();
      }
   });
 });
@@ -42,6 +44,7 @@ app.post('*', function(req,res,next){
      else{
         console.log("Client is null");
         //TODO - Load the connection error page
+	res.send(500, "Load the error connection page");
      }
   });
 });
@@ -57,6 +60,7 @@ app.put('*', function(req,res,next){
      else{
         console.log("Client is null");
         //TODO - Load the connection error page
+	res.send(500, "Load the error connection page");
      }
   });
 });
@@ -72,6 +76,7 @@ app.delete('*', function(req,res,next){
      else{
         console.log("Client is null");
         //TODO - Load the connection error page
+	res.send(500, "Load the error connection page");
      }
   });
 });
@@ -79,8 +84,9 @@ app.delete('*', function(req,res,next){
 
 
 // call to load the home page
+//TODO - Load the Home Page here
 app.get('/', function(req, res) {
-  res.send('Load the home page here');
+  res.send(200, 'Load the home page here');
 });
 
 //TODO - review the below get code - MAY NOT BE NEEDED.
@@ -105,11 +111,14 @@ app.get('/:loc/:srchqry', function(req,res,next){
   }
 });
 
+
+//TODO - Delete all the APIs for dish table from here after testing.
 //API - for the table "DISH"
 //GET API for the dish table
 //    url - http://locahost:port/dish/<dish_name>
 //TODO - add null check for pgclient
 //TODO - IN CASE OF ALL QUERY FUNCTION CALL FOR pgclient, HANDLE THE ERROR SCENARIO
+/*
 app.get('/dish/:dish_name', function(req,res){
   console.log(constants.SELECT_DISH_TABLE_QUERY);
   var qry = (constants.SELECT_DISH_TABLE_QUERY).replace('$1',req.params.dish_name);
@@ -128,11 +137,13 @@ app.get('/dish/:dish_name', function(req,res){
         res.send(dish_id);
   });
 });
+*/
 
 //POST API for the dish table
 //	url - http://localhost:port/dish/<dish_name>
 //TODO - call worker service to insert images.
 //TODO - extract image from the body the request. there can be multiple images. images will be sent in Base64 encoded format.
+/*
 app.post('/dish/:dish_name/:dish_type/:dish_category', function(req,res){
   console.log(constants.INSERT_DISH_TABLE_QUERY);
   current_date = new Date().getTime();
@@ -159,10 +170,12 @@ app.post('/dish/:dish_name/:dish_type/:dish_category', function(req,res){
      res.send(insert_succeeded);
   }
 });
+*/
 
 //PUT API for the dish table
 //      url - http://localhost:port/dish/<dish_name>
 // request body to contain the new dish name <new_dish_name>
+/*
 app.put('/dish/:dish_name', function(req,res){
   console.log(constants.UPDATE_DISH_TABLE_QUERY);
   current_date = new Date().getTime();
@@ -188,9 +201,11 @@ app.put('/dish/:dish_name', function(req,res){
      res.send(update_succeeded);
   }
 });
+*/
 
 //DELETE API for the dish table - This is called only by moderater action. Cannot be called by end user
 //      url - http://localhost:port/dish/<dish_name>
+/*
 app.delete('/dish/:dish_name', function(req,res){
   console.log(constants.DELETE_DISH_TABLE_QUERY);
   var qry = (constants.DELETE_DISH_TABLE_QUERY).replace('$1',req.params.dish_name);
@@ -214,11 +229,12 @@ app.delete('/dish/:dish_name', function(req,res){
      res.send(delete_succeeded);
   }
 });
-
+*/
 
 
 //API - for the table hotel
 //    url - http://localhost:port/hotel/<hotel_name>
+/*
 app.get('/hotel/:hotel_name', function(req,res){
   console.log(constants.SELECT_HOTEL_TABLE_QUERY);
   var qry = (constants.SELECT_HOTEL_TABLE_QUERY).replace('$1',req.params.hotel_name);
@@ -243,12 +259,12 @@ app.get('/hotel/:hotel_name', function(req,res){
      res.send("Load the connection error page");
   }
 });
-
+*/
 
 
 // API - post request for the table “HOTEL”
 // url - http://localhost:port/hotel
-
+/*
 app.post('/hotel', function(req,res){
   console.log(constants.INSERT_HOTEL_TABLE_QUERY);
   current_date = new Date().getTime();
@@ -276,11 +292,13 @@ app.post('/hotel', function(req,res){
      res.send(insert_succeeded);
   }
 });
+*/
 
 
 //API for the table review
 //   url for get - http://localhost:port/review/:hotel_dish_id
 //      Algorithm - Based on the hotel_dish_id
+/*
 app.get('/review/:hotel_dish_id', function(req,res){
    var qry = (constants.SELECT_REVIEW_TABLE_QUERY).replace('$1', req.params.hotel_dish_id);
    console.log("Final Query:"+qry);
@@ -308,11 +326,13 @@ app.get('/review/:hotel_dish_id', function(req,res){
    }
 
 });
+*/
 
 // API to post review
 // url for post - http://localhost:port/review/<hotel_dish_id>
 // request body to contain the user_id, each of the 6 review params and text review
 //TODO - complete the code below
+/*
 app.post('/review/:hotel_dish_id', function(req, res){
    current_date = new Date().getTime();
    var qry = (constants.INSERT_REVIEW_TABLE_QUERY).replace('$1',current_date).replace('$2',req.params.hotel_dish_id).replace('$3',req.body.user_id)
@@ -339,9 +359,12 @@ app.post('/review/:hotel_dish_id', function(req, res){
       res.send("Load the Error Page");
    }
 });
+*/
 
-
-//add require for the worker.js file - 
+//add require for the dish.js, hotel.js, review.js, worker.js file -
+require("./dish")(app, pgclient, constants); 
+require("./hotel")(app, pgclient, constants);
+require("./review")(app, pgclient, constants);
 require("./worker")(app);
 
 //declare the port and listen to it
