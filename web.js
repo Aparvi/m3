@@ -112,32 +112,6 @@ app.get('/:loc/:srchqry', function(req,res,next){
 });
 
 
-//TODO - Delete all the APIs for dish table from here after testing.
-//API - for the table "DISH"
-//GET API for the dish table
-//    url - http://locahost:port/dish/<dish_name>
-//TODO - add null check for pgclient
-//TODO - IN CASE OF ALL QUERY FUNCTION CALL FOR pgclient, HANDLE THE ERROR SCENARIO
-/*
-app.get('/dish/:dish_name', function(req,res){
-  console.log(constants.SELECT_DISH_TABLE_QUERY);
-  var qry = (constants.SELECT_DISH_TABLE_QUERY).replace('$1',req.params.dish_name);
-  console.log("Final Query:"+qry);
-  var dish_id;
-  pgclient.query(qry,function(error, result){
-        console.log("The result set:"+result.rows.length);
-	if(result != null && result.rows !=null && result.rows.length > 0){
-	    dish_id = result.rows[0].dish_id.toString();
-	}
-	else{
-	    dish_id = "No Data found for the given dish_name";
-	}
-	console.log("dish_id:"+dish_id);
-        //send the dish_id as the response
-        res.send(dish_id);
-  });
-});
-*/
 
 //POST API for the dish table
 //	url - http://localhost:port/dish/<dish_name>
