@@ -352,7 +352,7 @@ app.post('/review/:hotel_dish_id', function(req, res){
 //require("./dish")(app, pgclient, constants); 
 //require("./hotel")(app, pgclient, constants);
 //require("./review")(app, pgclient, constants);
-require("./worker")(app);
+//require("./worker")(app);
 
 //declare the port and listen to it
 var port = Number(process.env.PORT || 5000);
