@@ -19,6 +19,10 @@ app.get('*', function(req,res,next){
   pg.connect(process.env.DATABASE_URL, function(err, client, done) {
      if(client != null){
         pgclient = client;
+        require("./dish")(app, pgclient, constants);
+        require("./hotel")(app, pgclient, constants);
+        require("./review")(app, pgclient, constants);
+
         console.log("Client connection with Postgres DB is established");
 	next();
      }
@@ -39,6 +43,9 @@ app.post('*', function(req,res,next){
      if(client != null){
         pgclient = client;
         console.log("Client connection with Postgres DB is established");
+        require("./dish")(app, pgclient, constants);
+        require("./hotel")(app, pgclient, constants);
+        require("./review")(app, pgclient, constants);
         next();
      }
      else{
@@ -55,6 +62,9 @@ app.put('*', function(req,res,next){
      if(client != null){
         pgclient = client;
         console.log("Client connection with Postgres DB is established");
+        require("./dish")(app, pgclient, constants);
+        require("./hotel")(app, pgclient, constants);
+        require("./review")(app, pgclient, constants);
         next();
      }
      else{
@@ -71,6 +81,9 @@ app.delete('*', function(req,res,next){
      if(client != null){
         pgclient = client;
         console.log("Client connection with Postgres DB is established");
+        require("./dish")(app, pgclient, constants);
+        require("./hotel")(app, pgclient, constants);
+        require("./review")(app, pgclient, constants);
         next();
      }
      else{
@@ -336,9 +349,9 @@ app.post('/review/:hotel_dish_id', function(req, res){
 */
 
 //add require for the dish.js, hotel.js, review.js, worker.js file -
-require("./dish")(app, pgclient, constants); 
-require("./hotel")(app, pgclient, constants);
-require("./review")(app, pgclient, constants);
+//require("./dish")(app, pgclient, constants); 
+//require("./hotel")(app, pgclient, constants);
+//require("./review")(app, pgclient, constants);
 require("./worker")(app);
 
 //declare the port and listen to it
