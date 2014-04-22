@@ -18,7 +18,7 @@ module.exports = function(app, pgclient, constants){
               res.send(200, hotel_id);
            }
            else{
-             dish_id = "No Data found for the given hotel_name";
+             hotel_id = "No Data found for the given hotel_name";
              res.send(404, hotel_id);
            }
         });
@@ -70,8 +70,8 @@ module.exports = function(app, pgclient, constants){
      }
   });
 
-  //DELETE API for the dish table - This is called only by moderater action. Cannot be called by end user
-  //      url - http://localhost:port/dish/<dish_name>
+  //DELETE API for the hotel table - This is called only by moderater action. Cannot be called by end user
+  //      url - http://localhost:port/hotel/<hotel_name>
   app.delete('/hotel/:hotel_name', function(req,res){
     var qry = (constants.DELETE_HOTEL_TABLE_QUERY).replace('$1',req.params.hotel_name);
     console.log("Final Query:"+qry);
